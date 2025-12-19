@@ -1,6 +1,6 @@
 # Todo & Weather App
 
-A full-stack Next.js 16 application with a **Todo list** and **Weather display** components. This project demonstrates modern React features, Next.js API routes, unit testing, and a clean component architecture.
+A full-stack Next.js 16 application with a **Todo list** and **Weather display** components. This project demonstrates modern React features, Next.js API routes, unit testing.
 
 ---
 

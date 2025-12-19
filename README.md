@@ -8,6 +8,7 @@ A full-stack Next.js 16 application with a **Todo list** and **Weather display**
 
 - [Features](#features)  
 - [Folder Structure](#folder-structure)  
+- [Stack](#stack)
 - [Setup](#setup)  
 - [Environment Variables](#environment-variables)  
 - [Components](#components)  
@@ -32,6 +33,18 @@ A full-stack Next.js 16 application with a **Todo list** and **Weather display**
   - Unit tests for API routes and data layer  
   - Integration tests for Weather API route (mocked)  
   - Tests colocated with the files they test  
+
+---
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router, Server & Client Components)  
+- **Language:** TypeScript  
+- **Styling:** Tailwind CSS v4  
+- **UI Components & Icons:** Heroicons, React Icons  
+- **API:** Next.js API routes (REST)  
+- **Testing:** Jest, React Testing Library  
+- **Data Layer:** In-memory for Todo items (can be replaced with DB) 
 
 ---
 

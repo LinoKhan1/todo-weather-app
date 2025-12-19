@@ -157,9 +157,9 @@ deleteTodo("id123");
 
 - POST /api/todo – Add a new todo ({ title: string })
 
-PATCH /api/todo/[id] – Update a todo ({ title?: string; completed?: boolean })
+- PATCH /api/todo/[id] – Update a todo ({ title?: string; completed?: boolean })
 
-DELETE /api/todo/[id] – Delete a todo
+- DELETE /api/todo/[id] – Delete a todo
 
 #### Weather API
 

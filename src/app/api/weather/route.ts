@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 
-const API_KEY = process.env.OPEN_WEATHER_API_KEY; // Required OpenWeatherMap API key
-const LAT = "-33.9258"; // Cape Town latitude
-const LON = "18.4232";  // Cape Town longitude
-
 /**
  * GET /api/weather
  * Fetches current weather data for a fixed location from OpenWeatherMap.
  */
 export async function GET() {
+  
+  const API_KEY = process.env.OPEN_WEATHER_API_KEY; // Required OpenWeatherMap API key
+  const LAT = "-33.9258"; // Cape Town latitude
+  const LON = "18.4232"; // Cape Town longitude
+
   // Ensure API key is provided
   if (!API_KEY) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
@@ -22,7 +23,10 @@ export async function GET() {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("OpenWeatherMap response error:", errorText);
-      return NextResponse.json({ error: "Failed to fetch weather" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Failed to fetch weather" },
+        { status: 500 }
+      );
     }
 
     const data = await res.json();

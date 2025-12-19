@@ -55,17 +55,22 @@ export default function Todo() {
   };
 
   // Toggle completed
-  const toggleCompleted = (id: string) => {
+  const toggleCompleted = async (id: string) => {
     setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+      prev.map((t) => {
+        if (t.id === id) {
+          const updated = { ...t, completed: !t.completed };
+          // Fire PATCH
+          fetch(`/api/todo/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ completed: updated.completed }),
+          }).catch(console.error);
+          return updated;
+        }
+        return t;
+      })
     );
-
-    const current = todos.find((t) => t.id === id);
-    fetch(`/api/todo/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ completed: !current?.completed }),
-    }).catch((err) => console.error("Failed to update todo:", err));
   };
 
   // Delete todo
@@ -78,14 +83,13 @@ export default function Todo() {
     }
   };
 
-  // Finish editing a todo
+  // Editing a todo
   const handleFinishEditing = async (id: string) => {
     if (!editingText.trim()) {
       setEditingId(null);
       return;
     }
 
-    // Optimistic update
     setTodos((prev) =>
       prev.map((t) => (t.id === id ? { ...t, title: editingText } : t))
     );

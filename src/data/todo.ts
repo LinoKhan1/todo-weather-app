@@ -2,19 +2,25 @@ import { Todo } from "../types/todo";
 
 // In-memory store (resets on server restart)
 let todos: Todo[] = [
-  // Optional placeholder
-  { id: "placeholder-1", title: "This is a placeholder todo", completed: false, createdAt: new Date().toISOString() },
+  { 
+    id: "placeholder-1", 
+    title: "This is a placeholder todo", 
+    completed: false, 
+    createdAt: new Date().toISOString() 
+  },
 ];
 
 /**
- * Get all todos
+ * Returns all todos in the in-memory store.
  */
 export function getTodos(): Todo[] {
   return todos;
 }
 
 /**
- * Add a new todo
+ * Adds a new todo with a unique ID and timestamp.
+ * @param title - The title of the todo item
+ * @returns The newly created Todo object
  */
 export function addTodo(title: string): Todo {
   const newTodo: Todo = {
@@ -29,9 +35,16 @@ export function addTodo(title: string): Todo {
 }
 
 /**
- * Update an existing todo by ID
+ * Updates an existing todo by ID.
+ * Supports partial updates (title and/or completed status).
+ * @param id - The ID of the todo to update
+ * @param updates - Partial updates to apply
+ * @returns The updated Todo object, or null if not found
  */
-export function updateTodo(id: string, updates: Partial<Pick<Todo, "title" | "completed">>): Todo | null {
+export function updateTodo(
+  id: string, 
+  updates: Partial<Pick<Todo, "title" | "completed">>
+): Todo | null {
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) return null;
 
@@ -40,7 +53,9 @@ export function updateTodo(id: string, updates: Partial<Pick<Todo, "title" | "co
 }
 
 /**
- * Delete a todo by ID
+ * Deletes a todo by ID.
+ * @param id - The ID of the todo to delete
+ * @returns True if a todo was deleted, false otherwise
  */
 export function deleteTodo(id: string): boolean {
   const initialLength = todos.length;

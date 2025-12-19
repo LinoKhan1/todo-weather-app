@@ -15,7 +15,7 @@ export default function Todo() {
   const [newTodo, setNewTodo] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch todos on mount
+  // Fetch todos from API when component mounts
   useEffect(() => {
     fetch("/api/todo")
       .then((res) => res.json())
@@ -33,7 +33,7 @@ export default function Todo() {
     ? todos.filter((todo) => !todo.completed)
     : todos;
 
-  // Add new todo
+  /** Add a new todo via API and update local state */
   const handleAdd = async () => {
     if (!newTodo.trim()) return;
 
@@ -51,13 +51,12 @@ export default function Todo() {
     }
   };
 
-  // Toggle completed with optimistic update
+  /** Toggle todo completed status optimistically and send PATCH request */
   const toggleCompleted = (id: string) => {
     setTodos((prev) =>
       prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
     );
 
-    // Fire-and-forget PATCH to server
     const current = todos.find((t) => t.id === id);
     fetch(`/api/todo/${id}`, {
       method: "PATCH",
@@ -66,7 +65,7 @@ export default function Todo() {
     }).catch((err) => console.error("Failed to update todo:", err));
   };
 
-  // Delete todo
+  /** Delete a todo and update local state */
   const deleteTodoItem = async (id: string) => {
     try {
       await fetch(`/api/todo/${id}`, { method: "DELETE" });
@@ -80,7 +79,7 @@ export default function Todo() {
 
   return (
     <section className="mt-[160px] max-w-4xl mx-auto space-y-4">
-      {/* Form */}
+      {/* Input form for adding todos */}
       <form
         className="flex rounded-[50px] bg-[#F1ECE6] overflow-hidden"
         onSubmit={(e) => {
@@ -96,14 +95,13 @@ export default function Todo() {
           onChange={(e) => setNewTodo(e.target.value)}
         />
         <button
-          type="submit"
           className="px-4 py-2 bg-[#76B7CD] text-[#F3F3F3] rounded-r-[50px] font-semibold"
         >
           ADD
         </button>
       </form>
 
-      {/* Hide Completed */}
+      {/* Toggle hiding completed todos */}
       <div className="text-right px-6">
         <span
           className="text-[#D98326] cursor-pointer"
@@ -113,15 +111,15 @@ export default function Todo() {
         </span>
       </div>
 
-      {/* Todo List */}
+      {/* Todo list */}
       <ul className="space-y-2 bg-[#F1ECE6] rounded-[25px] ">
         {visibleTodos.map((todo) => (
           <li
             key={todo.id}
-            className="flex items-center justify-between  px-4 py-4 "
+            className="flex items-center justify-between px-4 py-4"
           >
             <div className="flex items-center space-x-2">
-              {/* Check / Empty circle */}
+              {/* Completed / not completed indicator */}
               {todo.completed ? (
                 <CheckCircleIcon
                   className="h-6 w-6 text-[#D98326] cursor-pointer"
@@ -134,7 +132,7 @@ export default function Todo() {
                 />
               )}
 
-              {/* Todo title */}
+              {/* Todo title with line-through if completed */}
               <span
                 className={`transition-all ${
                   todo.completed ? "line-through text-gray-500 " : ""
@@ -144,7 +142,7 @@ export default function Todo() {
               </span>
             </div>
 
-            {/* Trash Icon */}
+            {/* Delete icon */}
             <TrashIcon
               className="h-5 w-5 text-[#B30B04] cursor-pointer"
               onClick={() => deleteTodoItem(todo.id)}

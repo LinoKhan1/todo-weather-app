@@ -1,6 +1,5 @@
 import { GET } from "./route";
 
-// Minimal Response-like mock type
 type FetchMockResponse = {
   ok: boolean;
   json: () => Promise<unknown>;
@@ -10,6 +9,7 @@ type FetchMockResponse = {
 describe("GET /api/weather", () => {
   const originalFetch = global.fetch;
 
+  // Sample mock data returned by OpenWeatherMap API
   const mockWeatherData = {
     main: { temp: 22.5 },
     name: "Cape Town",
@@ -18,11 +18,13 @@ describe("GET /api/weather", () => {
   };
 
   beforeEach(() => {
+    // Ensure the API key is set before each test
     process.env.OPEN_WEATHER_API_KEY = "fake-api-key";
     jest.resetAllMocks();
   });
 
   afterEach(() => {
+    // Restore original fetch to avoid affecting other tests
     global.fetch = originalFetch;
   });
 
@@ -38,7 +40,7 @@ describe("GET /api/weather", () => {
     const data = await response.json();
 
     expect(data).toEqual({
-      temperature: 23, // rounded
+      temperature: 23, // temperature is rounded
       city: "Cape Town",
       country: "ZA",
       description: "clear sky",

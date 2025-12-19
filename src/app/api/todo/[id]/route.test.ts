@@ -1,6 +1,7 @@
 import { PATCH, DELETE } from "./route";
 import { updateTodo, deleteTodo } from "../../../../data/todo";
 
+// Mock data layer to isolate route behavior
 jest.mock("../../../../data/todo", () => ({
   updateTodo: jest.fn(),
   deleteTodo: jest.fn(),
@@ -33,6 +34,7 @@ describe("Todo API [id] route", () => {
       const response = await PATCH(request, params);
       const data = await response.json();
 
+      // Verify response and data layer call
       expect(response.status).toBe(200);
       expect(data).toEqual(updatedTodo);
       expect(updateTodo).toHaveBeenCalledWith("test-id", { completed: true });
@@ -66,6 +68,8 @@ describe("Todo API [id] route", () => {
 
       expect(response.status).toBe(400);
       expect(data).toEqual({ error: "Invalid request" });
+
+      // Ensure data layer was not called
       expect(updateTodo).not.toHaveBeenCalled();
     });
   });
@@ -81,6 +85,7 @@ describe("Todo API [id] route", () => {
       const response = await DELETE(request, params);
       const data = await response.json();
 
+      // Verify deletion and response
       expect(response.status).toBe(200);
       expect(data).toEqual({ success: true });
       expect(deleteTodo).toHaveBeenCalledWith("test-id");

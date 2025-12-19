@@ -109,7 +109,7 @@ Visit http://localhost:3000
 - Current date
 - 
 
-### API Routes
+## API Routes
 
 #### Todo API
 
@@ -138,35 +138,32 @@ Returns JSON:
 
 Returns 500 if API key is missing or fetch fails
 
-Testing
+## Testing
 
 Uses Jest and React Testing Library
-
 Tests are colocated with their respective files
 
 Todo tests cover:
 
-CRUD operations
-
-Partial updates
-
-Unique ID generation
+- CRUD operations
+- Partial updates
+- Unique ID generation
 
 Weather API tests cover:
 
-Successful fetch
+- Successful fetch
+- Missing API key
+- Non-ok responses and exceptions
 
-Missing API key
+### Run tests:
 
-Non-ok responses and exceptions
-
-Run tests:
-
+```sh
 npm test
 # or
 yarn test
+```
 
-License
+## License
 
 This project is licensed under the MIT License.
 

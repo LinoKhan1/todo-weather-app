@@ -146,6 +146,7 @@ const todos = getTodos();
 addTodo({ title: "New task" });
 updateTodo("id123", { title: "Updated task", completed: true });
 deleteTodo("id123");
+```
 
 
 ## API Routes

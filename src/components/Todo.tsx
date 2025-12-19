@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon} from "@heroicons/react/24/outline";
+import { PiTrashSimple } from "react-icons/pi";
+
 
 type TodoItem = {
   id: string;
@@ -78,10 +80,10 @@ export default function Todo() {
   if (loading) return <p className="text-center mt-40">Loading todos...</p>;
 
   return (
-    <section className="mt-[160px] max-w-4xl mx-auto space-y-4">
+    <section className="mt-25 md:mt-40 max-w-4xl mx-6.25 md:mx-auto space-y-6">
       {/* Input form for adding todos */}
       <form
-        className="flex rounded-[50px] bg-[#F1ECE6] overflow-hidden"
+        className="flex rounded-[50px] bg-cream overflow-hidden"
         onSubmit={(e) => {
           e.preventDefault();
           handleAdd();
@@ -89,14 +91,12 @@ export default function Todo() {
       >
         <input
           type="text"
-          className="flex-1 px-4 py-2 rounded-l-[50px] focus:outline-none bg-[#F1ECE6] placeholder-[#969696]"
+          className="flex-1 px-6 py-3 rounded-l-[50px] focus:outline-none input-text"
           placeholder="What do you need to do?"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
         />
-        <button
-          className="px-4 py-2 bg-[#76B7CD] text-[#F3F3F3] rounded-r-[50px] font-semibold"
-        >
+        <button className="px-4 py-2 button-primary cursor-pointer rounded-r-[50px] font-semibold">
           ADD
         </button>
       </form>
@@ -104,7 +104,7 @@ export default function Todo() {
       {/* Toggle hiding completed todos */}
       <div className="text-right px-6">
         <span
-          className="text-[#D98326] cursor-pointer"
+          className="text-hide-completed cursor-pointer"
           onClick={() => setHideCompleted(!hideCompleted)}
         >
           Hide Completed
@@ -112,39 +112,43 @@ export default function Todo() {
       </div>
 
       {/* Todo list */}
-      <ul className="space-y-2 bg-[#F1ECE6] rounded-[25px] ">
+      <ul className="space-y-2 bg-[#F1ECE6] rounded-[25px] md:rounded-[50px] ">
         {visibleTodos.map((todo) => (
           <li
             key={todo.id}
-            className="flex items-center justify-between px-4 py-4"
+            className="flex items-center justify-between py-4  px-8 md:py-6"
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-4 flex-1">
               {/* Completed / not completed indicator */}
               {todo.completed ? (
                 <CheckCircleIcon
-                  className="h-6 w-6 text-[#D98326] cursor-pointer"
+                  className="icon-check ml-0 text-[#D98326] cursor-pointer"
                   onClick={() => toggleCompleted(todo.id)}
                 />
               ) : (
                 <span
-                  className="inline-block h-6 w-6 border-2 border-[#737373] rounded-full cursor-pointer"
+                  className="inline-block ml-1 h-7.5 w-7.5 md:h-9 md:w-9 border-2 border-[#737373] rounded-full cursor-pointer"
                   onClick={() => toggleCompleted(todo.id)}
                 />
               )}
 
-              {/* Todo title with line-through if completed */}
-              <span
-                className={`transition-all ${
-                  todo.completed ? "line-through text-gray-500 " : ""
-                }`}
-              >
-                {todo.title}
-              </span>
+              {/* Text wrapper with underline */}
+              <div className="flex-1 border-b border-[#76B7CD] pb-1 ">
+                <span
+                  className={`block transition-all ${
+                    todo.completed
+                      ? "line-through todo-item-completed"
+                      : "todo-item ml-1"
+                  }`}
+                >
+                  {todo.title}
+                </span>
+              </div>
             </div>
 
             {/* Delete icon */}
-            <TrashIcon
-              className="h-5 w-5 text-[#B30B04] cursor-pointer"
+            <PiTrashSimple
+              className="icon-bin cursor-pointer"
               onClick={() => deleteTodoItem(todo.id)}
             />
           </li>

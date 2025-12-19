@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+import { LuSunMedium } from "react-icons/lu";
 
 type WeatherData = {
   temperature: number;
@@ -38,22 +39,38 @@ export default function Weather() {
   });
 
   return (
-    <section className="max-w-4xl mt-8 rounded-[25px] bg-gradient-to-r from-[#00D2FF] to-[#3A7BD5] p-6 mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-        {/* Degree */}
-        <div className="text-[180px] font-bold text-white">
-          {weather.temperature}°
+    <section className="relative max-w-4xl my-8 rounded-[25px] bg-weather-gradient p-6 mx-6.25 md:mx-auto overflow-hidden">
+      {/* Symmetric Decorative Circles with Sun */}
+      <div className="absolute -top-[30%] md:-top-[60%] right-12.5 md:right-25 flex items-center ">
+        <div className="relative">
+          <div className=" w-36 h-36 md:w-72 md:h-73 rounded-full bg-white opacity-[0.23]" />
+          <div className="absolute top-1/2 left-1/2  w-28  h-28 md:w-56 md:h-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-[0.28]" />
+          <div className="absolute top-1/2 left-1/2 w-20 h-20 md:w-40 md:h-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FCE588]" />
+        </div>
+
+        <LuSunMedium className="w-12.5 h-12.5 md:w-25 md:h-25 text-white mt-25 md:mt-50  -ml-4 md:-ml-8" />
+      </div>
+
+      <div className="relative text-center md:text-left z-10 flex flex-col md:flex-row items-center pt-10 mx-auto md:ml-17.5 text-white">
+        {/* Temperature */}
+        <div className="flex items-start">
+          <span className="text-[100px] md:text-[180px] leading-none">
+            {weather.temperature}
+          </span>
+          <span className="text-[50px] md:text-[80px] leading-none mt-1 md:mt-4 ml-1">°</span>
         </div>
 
         {/* Date & Location */}
-        <div className="flex flex-col justify-center text-white space-y-2">
+        <div className="mt-4 md:mt-14 flex flex-col justify-center md:ml-4">
           {/* Date */}
-          <div className="text-lg">{date}</div>
+          <div className="text-xl md:text-2xl ml-2 mb-2 md:ml-0">{date}</div>
 
-          {/* Location with icon */}
-          <div className="flex items-center space-x-2 text-2xl font-semibold">
-            <MapPinIcon className="h-6 w-6" />
-            <span>{`${weather.city}, ${weather.country}`}</span>
+          {/* Location */}
+          <div className="flex items-center gap-2 text-xl md:text-2xl">
+            <MapPinIcon className="w-6 h-6 md:w-7.5 md:h-7.5" />
+            <span>
+              {weather.city}, {weather.country}
+            </span>
           </div>
         </div>
       </div>

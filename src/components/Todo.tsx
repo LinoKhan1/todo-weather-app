@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircleIcon} from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { PiTrashSimple } from "react-icons/pi";
-
 
 type TodoItem = {
   id: string;
@@ -16,8 +15,10 @@ export default function Todo() {
   const [hideCompleted, setHideCompleted] = useState(false);
   const [newTodo, setNewTodo] = useState("");
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
 
-  // Fetch todos from API when component mounts
+  // Fetch todos from API on mount
   useEffect(() => {
     fetch("/api/todo")
       .then((res) => res.json())
@@ -35,7 +36,7 @@ export default function Todo() {
     ? todos.filter((todo) => !todo.completed)
     : todos;
 
-  /** Add a new todo via API and update local state */
+  // Add new todo
   const handleAdd = async () => {
     if (!newTodo.trim()) return;
 
@@ -53,7 +54,7 @@ export default function Todo() {
     }
   };
 
-  /** Toggle todo completed status optimistically and send PATCH request */
+  // Toggle completed
   const toggleCompleted = (id: string) => {
     setTodos((prev) =>
       prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
@@ -67,7 +68,7 @@ export default function Todo() {
     }).catch((err) => console.error("Failed to update todo:", err));
   };
 
-  /** Delete a todo and update local state */
+  // Delete todo
   const deleteTodoItem = async (id: string) => {
     try {
       await fetch(`/api/todo/${id}`, { method: "DELETE" });
@@ -77,11 +78,35 @@ export default function Todo() {
     }
   };
 
+  // Finish editing a todo
+  const handleFinishEditing = async (id: string) => {
+    if (!editingText.trim()) {
+      setEditingId(null);
+      return;
+    }
+
+    // Optimistic update
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, title: editingText } : t))
+    );
+    setEditingId(null);
+
+    try {
+      await fetch(`/api/todo/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: editingText }),
+      });
+    } catch (err) {
+      console.error("Failed to update todo:", err);
+    }
+  };
+
   if (loading) return <p className="text-center mt-40">Loading todos...</p>;
 
   return (
     <section className="mt-25 md:mt-40 max-w-4xl mx-6.25 md:mx-auto space-y-6">
-      {/* Input form for adding todos */}
+      {/* Input form */}
       <form
         className="flex rounded-[50px] bg-cream overflow-hidden"
         onSubmit={(e) => {
@@ -101,7 +126,7 @@ export default function Todo() {
         </button>
       </form>
 
-      {/* Toggle hiding completed todos */}
+      {/* Hide completed */}
       <div className="text-right px-6">
         <span
           className="text-hide-completed cursor-pointer"
@@ -112,11 +137,11 @@ export default function Todo() {
       </div>
 
       {/* Todo list */}
-      <ul className="space-y-2 bg-[#F1ECE6] rounded-[25px] md:rounded-[50px] ">
+      <ul className="space-y-2 bg-[#F1ECE6] rounded-[25px] md:rounded-[50px]">
         {visibleTodos.map((todo) => (
           <li
             key={todo.id}
-            className="flex items-center justify-between py-4  px-8 md:py-6"
+            className="flex items-center justify-between py-4 px-8 md:py-6"
           >
             <div className="flex items-center gap-4 flex-1">
               {/* Completed / not completed indicator */}
@@ -132,17 +157,35 @@ export default function Todo() {
                 />
               )}
 
-              {/* Text wrapper with underline */}
-              <div className="flex-1 border-b border-[#76B7CD] pb-1 ">
-                <span
-                  className={`block transition-all ${
-                    todo.completed
-                      ? "line-through todo-item-completed"
-                      : "todo-item ml-1"
-                  }`}
-                >
-                  {todo.title}
-                </span>
+              {/* Editable title with underline */}
+              <div className="flex-1 border-b border-[#76B7CD] pb-1">
+                {editingId === todo.id ? (
+                  <input
+                    type="text"
+                    value={editingText}
+                    autoFocus
+                    className="w-full bg-transparent focus:outline-none"
+                    onChange={(e) => setEditingText(e.target.value)}
+                    onBlur={() => handleFinishEditing(todo.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleFinishEditing(todo.id);
+                    }}
+                  />
+                ) : (
+                  <span
+                    className={`block transition-all cursor-pointer ${
+                      todo.completed
+                        ? "line-through todo-item-completed"
+                        : "todo-item ml-1"
+                    }`}
+                    onClick={() => {
+                      setEditingId(todo.id);
+                      setEditingText(todo.title);
+                    }}
+                  >
+                    {todo.title}
+                  </span>
+                )}
               </div>
             </div>
 

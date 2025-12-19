@@ -85,10 +85,13 @@ yarn install
 
 ```
 ### 3. Environment Variable
-The app requires an OpenWeatherMap API key to fetch weather data. Create a .env.local file at the root:
+The app requires an OpenWeatherMap API key, lon and lat to fetch weather data. Create a .env.local file at the root:
 
 ```sh
 OPEN_WEATHER_API_KEY=your_openweather_api_key
+WEATHER_LAT=location_lat
+WEATHER_LON=location_lon
+
 ```
 Note: If the API key is missing, the Weather API route will return a 500 error
 
@@ -120,7 +123,30 @@ Visit http://localhost:3000
 - Temperature
 - City and country
 - Current date
-- 
+
+
+### Database
+
+Todos are stored in an **in-memory JSON object**. This means:
+- Updates and deletions are immediately reflected in the UI.
+- Data will be lost if the server restarts or when deploying to a new environment.
+- This is sufficient for demo purposes; a persistent database (e.g., SQLite, MongoDB) can be used for production.
+
+## Data Layer
+
+All todo data is managed in a single file: `data/todo.ts`.  
+
+- This file defines the `TodoItem` type and provides helper functions to **create, read, update, and delete** todos in an **in-memory JSON object**.  
+- No separate service layer is required given the simplicity of this application.  
+- Example usage:
+```ts
+import { getTodos, addTodo, updateTodo, deleteTodo } from "../data/todo";
+
+const todos = getTodos();
+addTodo({ title: "New task" });
+updateTodo("id123", { title: "Updated task", completed: true });
+deleteTodo("id123");
+
 
 ## API Routes
 

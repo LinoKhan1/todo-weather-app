@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
   
   const API_KEY = process.env.OPEN_WEATHER_API_KEY; // Required OpenWeatherMap API key
-  const LAT = "-33.9258"; // Cape Town latitude
-  const LON = "18.4232"; // Cape Town longitude
+  const LAT = process.env.WEATHER_LAT; // Location latitude
+  const LON = process.env.WEATHER_LON; // Location longitude
 
   // Ensure API key is provided
   if (!API_KEY) {

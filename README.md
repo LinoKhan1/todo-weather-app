@@ -103,7 +103,7 @@ npm run dev
 yarn dev
 ```
 Visit http://localhost:3000
-
+---
 ## Components
 ### Todo Component (Todo.tsx)
 - Client-side component using React state and hooks
@@ -124,15 +124,15 @@ Visit http://localhost:3000
 - City and country
 - Current date
 
-
-### Database
+---
+## Database
 
 Todos are stored in an **in-memory JSON object**. This means:
 - Updates and deletions are immediately reflected in the UI.
 - Data will be lost if the server restarts or when deploying to a new environment.
 - This is sufficient for demo purposes; a persistent database (e.g., SQLite, MongoDB) can be used for production.
 
-## Data Layer
+### Data Layer
 
 All todo data is managed in a single file: `data/todo.ts`.  
 
@@ -148,7 +148,7 @@ updateTodo("id123", { title: "Updated task", completed: true });
 deleteTodo("id123");
 ```
 
-
+---
 ## API Routes
 
 #### Todo API
@@ -177,7 +177,7 @@ Returns JSON:
 
 
 Returns 500 if API key is missing or fetch fails
-
+---
 ## Testing
 
 Uses Jest and React Testing Library
@@ -202,7 +202,7 @@ npm test
 # or
 yarn test
 ```
-
+---
 ## License
 
 This project is licensed under the MIT License.
